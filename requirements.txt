@@ -1,0 +1,6 @@
+pip~=23.2.1
+wheel~=0.41.2
+setuptools~=68.2.0
+pyserial~=3.5
+mpremote~=1.21.0
+zipp~=3.17.0
