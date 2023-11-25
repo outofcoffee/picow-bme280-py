@@ -125,7 +125,7 @@ class BME280:
         v2 = (adc_T / 131072.0 - digT[0] / 8192.0) * (adc_T / 131072.0 - digT[0] / 8192.0) * digT[2]
         t_fine = v1 + v2
         temperature = t_fine / 5120.0
-        # print "temp : %-6.2f â" % (temperature) 
+        # print "temp : %-6.2f °C" % (temperature)
         return temperature
 
     def compensate_H(self, adc_H):
@@ -140,8 +140,18 @@ class BME280:
             var_h = 100.0
         elif var_h < 0.0:
             var_h = 0.0
-        # print "hum : %6.2f ï¼" % (var_h)
+        # print "hum : %6.2f %%" % (var_h)
         return var_h
+
+
+def clear_screen():
+    """Clear the terminal screen."""
+    print("\033[H\033[2J")
+
+
+def calc_altitude():
+    """Calculate altitude in meters from pressure in hPa."""
+    return 44330.0 * (1.0 - pow(pressure / 1013.25, 0.190284))
 
 
 if __name__ == '__main__':
@@ -155,12 +165,13 @@ if __name__ == '__main__':
 
             pressure = data[0]
             temp = data[1] + t_offset
-            alt = 44330.0 * (1.0 - pow(pressure / 1013.25, 0.190284))
+            alt = calc_altitude()
 
+            clear_screen()
             print("pressure : %7.2f hPa" % pressure)
-            print("temp : %-6.2f C" %temp)
+            print("temp : %-6.2f °C" %temp)
             print("hum : %6.2f %%" %data[2])
-            print("alt: %6.2f m" %alt)
+            print("alt : %6.2f m" %alt)
             time.sleep(1)
         
     except KeyboardInterrupt:
